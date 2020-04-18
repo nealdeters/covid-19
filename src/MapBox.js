@@ -50,12 +50,22 @@ let addMapLayers = (map, data) => {
 
     let button = document.createElement('button');
     button.href = '#';
-    // button.className = layer.visible ? 'active' : '';
-    button.className = 'btn btn-sm btn-dark';
+    button.className = 'btn btn-sm ';
     button.textContent = layer.label;
     button.ref = layer.property;
+
+    if(layer.visible){
+    	button.className += 'btn-dark'
+    } else {
+    	button.className += 'btn-light'
+    }
      
     button.onclick = function(e) {
+      let nodes = e.target.parentNode.childNodes;
+      nodes.forEach(element => {
+      	element.classList.replace('btn-dark', 'btn-light');
+      })
+
       let target = e.target;
       e.preventDefault();
       e.stopPropagation();
@@ -65,6 +75,7 @@ let addMapLayers = (map, data) => {
         } else {
           layer.visible = false;
         }
+        target.classList.replace('btn-light', 'btn-dark')
         setLayerVisibility(map, layer);
       })
     };
