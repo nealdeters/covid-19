@@ -1,17 +1,13 @@
-import React from 'react';
-import './App.scss';
-import MapBox from './MapBox';
-import Navigation from './Navigation';
+// import React from 'react';
+// import './App.scss';
+// import MapBox from './MapBox';
 
-class App extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <Navigation />
-        <MapBox />
-      </React.Fragment>
-    );
-  }
-}
+// class App extends React.Component {
+//   render() {
+//     return (
+//       <MapBox />
+//     );
+//   }
+// }
 
-export default App;
+// export default App;

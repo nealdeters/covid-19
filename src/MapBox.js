@@ -1,4 +1,5 @@
 import React from 'react';
+import './MapBox.scss';
 import covidRequest from './covidRequest';
 import mapboxgl from 'mapbox-gl';
 
@@ -108,15 +109,15 @@ let convertToGeoJson = (data) => {
       properties: {
         confirmed: numberWithCommas(point.confirmed),
         recovered: numberWithCommas(point.recovered),
-        province: point.region.province,
-        country: point.region.name,
+        province: numberWithCommas(point.region.province),
+        country: numberWithCommas(point.region.name),
         deaths: numberWithCommas(point.deaths),
         recovered: numberWithCommas(point.recovered),
-        confirmed_diff: point.confirmed_diff,
-        deaths_diff: point.deaths_diff,
-        recovered_diff: point.recovered_diff,
-        active: point.active,
-        active_diff: point.active_diff,
+        confirmed_diff: numberWithCommas(point.confirmed_diff),
+        deaths_diff: numberWithCommas(point.deaths_diff),
+        recovered_diff: numberWithCommas(point.recovered_diff),
+        active: numberWithCommas(point.active),
+        active_diff: numberWithCommas(point.active_diff),
         fatality_rate: ((point.fatality_rate * 100).toFixed(2)).toString() + "%",
       }
     }
@@ -150,8 +151,6 @@ class MapBox extends React.Component {
 	    // define type and query params
 	    const type = "reports";
 	    const query = {
-	      // region_province: "Illinois",
-	      // iso: "USA",
 	      date: date
 	    }
 
