@@ -1,0 +1,22 @@
+@import "~bootstrap/scss/bootstrap";
+
+.country-search {
+	margin-top: 8px;
+}
+
+.country {
+	.search {
+		margin-top: 8px;
+	}
+
+	.list {
+		list-style: none;
+		margin: 5px 0;
+		height: calc(100vh - 160px);
+		overflow-y: scroll;
+	}
+}
+
+.global {
+
+}
