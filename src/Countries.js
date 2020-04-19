@@ -8,17 +8,9 @@ import covid from './covid';
 import UtilityService from './UtilityService';
 import './Countries.scss';
 
-// filter list on search
-  // onchange handler
 // on select of country will show new component below yesterday
-
-// country data
-// list country data
-// select name will go to country page
-
-// function ListItem(props) {
-//   return <ListGroup.item>{props.label}</ListGroup.item>;
-// }
+// on enter with only one result, select the option
+// create countryTotals component
 
 class CountryList extends React.Component {
   constructor(props) {
@@ -75,6 +67,18 @@ class CountryList extends React.Component {
     this.setState({filteredCountries: filteredCountries});
   }
 
+  handleClick(e) {
+    const date = UtilityService.getYesterday();
+    const type = 'reports';
+    const query = {
+      date: date,
+      iso: e.target.dataset.iso
+    }
+    covid.request(type, query).then(response => {
+      console.log(response.data);
+    })
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -87,7 +91,11 @@ class CountryList extends React.Component {
           />
           <ListGroup variant="flush" className="list">
             {this.state.filteredCountries.map((country) =>
-              <ListGroup.Item key={country.iso}>
+              <ListGroup.Item 
+                key={country.iso}
+                data-iso={country.iso}
+                className="list-item"
+                onClick={this.handleClick}>
                 {country.label}
               </ListGroup.Item>
             )}

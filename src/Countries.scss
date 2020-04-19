@@ -1,9 +1,5 @@
 @import "~bootstrap/scss/bootstrap";
 
-.country-search {
-	margin-top: 8px;
-}
-
 .country {
 	.search {
 		margin-top: 8px;
@@ -14,6 +10,10 @@
 		margin: 5px 0;
 		height: calc(100vh - 160px);
 		overflow-y: scroll;
+
+		.list-item {
+			cursor: pointer;
+		}
 	}
 }
 
