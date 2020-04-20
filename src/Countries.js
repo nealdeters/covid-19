@@ -133,12 +133,12 @@ class CountryTotals extends React.Component {
     this.subscription = MessageService.getMessage().subscribe(message => {
       if (message) {
         // add message to local state if not empty
-        this.setState({ iso: message.text });
+        this.setState({ iso: message.message });
       } else {
         // clear messages when empty message received
         this.setState({ iso: null });
       }
-      this.setCountry(message ? message.text : null);
+      this.setCountry(message ? message.message : null);
     });
   }
 
