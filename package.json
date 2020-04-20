@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mapbox-gl": "^1.9.1",
     "node-sass": "^4.13.1",
@@ -43,5 +44,6 @@
   "engines": {
     "node": "13.0.x",
     "npm": "6.x"
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
