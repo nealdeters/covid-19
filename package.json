@@ -44,6 +44,5 @@
   "engines": {
     "node": "13.0.x",
     "npm": "6.x"
-  },
-  "proxy": "http://localhost:8080"
+  }
 }

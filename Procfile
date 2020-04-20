@@ -1,3 +1,1 @@
-//Procfileweb: 
-
-node server
+web node server.js
