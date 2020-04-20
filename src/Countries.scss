@@ -1,6 +1,8 @@
 @import "~bootstrap/scss/bootstrap";
 
 .country {
+	margin-top: 15px;
+
 	.search {
 		margin-top: 8px;
 	}
@@ -11,12 +13,16 @@
 		height: calc(100vh - 160px);
 		overflow-y: scroll;
 
+		@media only screen and (max-width: 800px) {
+			height: 100px;
+		}
+
 		.list-item {
 			cursor: pointer;
 		}
 	}
 }
 
-.global {
-
+.country-totals {
+	margin-top: 15px;
 }
