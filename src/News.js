@@ -9,7 +9,7 @@ const API_KEY =`${process.env.REACT_APP_NEWS_API_KEY}`;
 const NewsService = {
   request: (type, query) => {
     const date = UtilityService.getYesterday();
-    let url = `http://newsapi.org/v2/everything?q=Coronavirus-statistics&from=2020-04-21&sortBy=popularity&apiKey=${API_KEY}`;
+    let url = `http://newsapi.org/v2/everything?q=top-covid-19-news&from=2020-04-21&sortBy=popularity&apiKey=${API_KEY}`;
     const method = "GET";
     return Request(url, method).then(response => {
       return response.json();
@@ -47,12 +47,22 @@ class News extends React.Component {
                       src={article.urlToImage}
                       rounded
                       className="news-image" />
-                    <a 
+                    <span className="news-content">
+                      <a 
                       href={article.url} 
                       target="_blank">
                         {article.title}</a>
+                      <p>{article.description}</p>
+                    </span>
                   </ListGroup.Item>
                 )}
+                <ListGroup.Item>
+                  <a 
+                    href="https://newsapi.org"
+                    target="_blank">
+                    Powered by NewsApi
+                  </a>
+                </ListGroup.Item>
               </ListGroup>
             </Col>
           </Row>
