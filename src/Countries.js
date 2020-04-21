@@ -9,10 +9,6 @@ import UtilityService from './UtilityService';
 import MessageService from './MessageService';
 import './Countries.scss';
 
-// on select of country will show new component below yesterday
-// on enter with only one result, select the option
-// create countryTotals component
-
 class CountryList extends React.Component {
   constructor(props) {
     super(props);
@@ -107,7 +103,7 @@ class CountryList extends React.Component {
   }
 }
 
-class CountryTotals extends React.Component {
+class TotalsTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -119,89 +115,95 @@ class CountryTotals extends React.Component {
       confirmed: 'Confirmed',
       recovered: 'Recovered',
       deaths: 'Deaths',
-      fatality_rate: 'Fatality Rate'
-    }
-
-    // if an iso is passed in, call to get the data
-    if(this.props.iso){
-      this.setCountry(this.props.iso);
+      fatality_rate: 'Fatality Rate',
+      global: 'Global'
     }
   }
 
   componentDidMount() {
-    // subscribe to home component messages
-    this.subscription = MessageService.getMessage().subscribe(message => {
-      if (message) {
-        // add message to local state if not empty
-        this.setState({ iso: message.message });
-      } else {
-        // clear messages when empty message received
-        this.setState({ iso: null });
+    if(this.props.global){
+      // get global data
+      this.setTotals();
+    } else {
+      // if an iso is passed in, call to get the data
+      if(this.props.iso){
+        this.setTotals(this.props.iso);
       }
-      this.setCountry(message ? message.message : null);
-    });
+
+      // subscribe to messages
+      this.subscription = MessageService.getMessage().subscribe(message => {
+        if (message) {
+          this.setState({ iso: message.message });
+        } else {
+          this.setState({ iso: null });
+        }
+        this.setTotals(message ? message.message : null);
+      });
+    }
   }
 
-  setCountry(iso){
+  setTotals(iso){
     const date = UtilityService.getYesterday();
-    const type = 'reports';
-    const query = {
-      date: date,
+    const type = iso ? 'reports' : 'reports/total';
+    const query = iso ? {
       iso: iso
+    } : {
+      date: date
     }
     covid.request(type, query).then(response => {
       const data = response.data;
-      let total = {
-        active: 0,
-        active_diff: 0,
-        confirmed: 0,
-        confirmed_diff: 0,
-        recovered: 0,
-        recovered_diff: 0,
-        deaths: 0,
-        deaths_diff: 0,
-        fatality_rate: 0,
-        name: null
-      }
-      data.forEach(province => {
-        total.active += province.active;
-        total.confirmed += province.confirmed;
-        total.recovered += province.recovered;
-        total.deaths += province.deaths;
-        total.fatality_rate += province.fatality_rate;
-        total.active_diff += province.active_diff;
-        total.confirmed_diff += province.confirmed_diff;
-        total.recovered_diff += province.recovered_diff;
-        total.deaths_diff += province.deaths_diff;
-
-        if(!total.name){
-          total.name = province.region.name
+      let total;
+      if(iso){
+        total = {
+          active: 0,
+          active_diff: 0,
+          confirmed: 0,
+          confirmed_diff: 0,
+          recovered: 0,
+          recovered_diff: 0,
+          deaths: 0,
+          deaths_diff: 0,
+          fatality_rate: 0,
+          name: null
         }
-      })
 
-      total.active = UtilityService.addCommas(total.active);
-      total.confirmed = UtilityService.addCommas(total.confirmed);
-      total.recovered = UtilityService.addCommas(total.recovered);
-      total.deaths = UtilityService.addCommas(total.deaths);
-      total.active_diff = UtilityService.addCommas(total.active_diff > 0 ? total.active_diff : 0);
-      total.confirmed_diff = UtilityService.addCommas(total.confirmed_diff > 0 ? total.confirmed_diff : 0);
-      total.recovered_diff = UtilityService.addCommas(total.recovered_diff > 0 ? total.recovered_diff : 0);
-      total.deaths_diff = UtilityService.addCommas(total.deaths_diff > 0 ? total.deaths_diff : 0);
-      total.fatality_rate = UtilityService.toPercentage(total.fatality_rate / data.length);
+        data.forEach(province => {
+          total.active += province.active;
+          total.confirmed += province.confirmed;
+          total.recovered += province.recovered;
+          total.deaths += province.deaths;
+          total.fatality_rate += province.fatality_rate;
+          total.active_diff += province.active_diff;
+          total.confirmed_diff += province.confirmed_diff;
+          total.recovered_diff += province.recovered_diff;
+          total.deaths_diff += province.deaths_diff;
 
-      this.setState({data: total});
+          if(!total.name){
+            total.name = province.region.name
+          }
+        })
+
+        total.fatality_rate = total.fatality_rate / data.length;
+      } else {
+        total = data;
+      }
+
+      for(let key in total){
+        if(key === 'fatality_rate'){
+          total[key] = UtilityService.toPercentage(total[key]);
+        } else {
+          if(typeof total[key] === 'number'){
+            total[key] = UtilityService.addCommas(total[key] > 0 ? total[key] : 0);
+          }
+        } 
+      }
+
+      this.setState({total: total});
     })
     .catch(err => {
       console.log(err);
-      this.setState({data: null});
+      this.setState({total: null});
     })
-
-    // covid.request('reports', {iso: iso}).then(response => {
-    //   console.log(response.data)
-    // })
-    // .catch(err => {
-    //   console.log(err);
-    // })
   }
 
   componentWillUnmount() {
@@ -210,124 +212,14 @@ class CountryTotals extends React.Component {
   }
 
   render() {
-    if(!this.state.data){
+    if(!this.state.total){
       return null;
     }
 
     return ( 
-      <div className="country">
-        <h1>{this.state.data.name} Totals</h1>
+      <div className="totals">
+        <h1>{this.props.global ? this.labels.global : this.state.total.name} Totals</h1>
         <div>
-            <h2>Yesterday</h2>
-            <Table responsive striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  <th>{this.labels.active}</th>
-                  <th>{this.labels.confirmed}</th>
-                  <th>{this.labels.recovered}</th>
-                  <th>{this.labels.deaths}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{this.state.data.active_diff}</td>
-                  <td>{this.state.data.confirmed_diff}</td>
-                  <td>{this.state.data.recovered_diff}</td>
-                  <td>{this.state.data.deaths_diff}</td>
-                </tr>
-              </tbody>
-            </Table>
-
-            <h2>Overall</h2>
-            <Table responsive striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  <th>{this.labels.active}</th>
-                  <th>{this.labels.confirmed}</th>
-                  <th>{this.labels.recovered}</th>
-                  <th>{this.labels.deaths}</th>
-                  <th>{this.labels.fatality_rate}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{this.state.data.active}</td>
-                  <td>{this.state.data.confirmed}</td>
-                  <td>{this.state.data.recovered}</td>
-                  <td>{this.state.data.deaths}</td>
-                  <td>{this.state.data.fatality_rate}</td>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-      </div>
-    );
-  }
-}
-
-class GlobalTotals extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      total: {
-        active: 0,
-        active_diff: 0,
-        confirmed: 0,
-        confirmed_diff: 0,
-        recovered: 0,
-        recovered_diff: 0,
-        deaths: 0,
-        deaths_diff: 0,
-        fatality_rate: 0
-      }
-    }
-    this.labels = {
-      active: 'Active',
-      confirmed: 'Confirmed',
-      recovered: 'Recovered',
-      deaths: 'Deaths',
-      fatality_rate: 'Fatality Rate'
-    }
-  }
-
-  componentDidMount() {
-    // load and prepare data
-    const date = UtilityService.getYesterday();
-
-    // define type and query params
-    const totalType = "reports/total";
-    const totalQuery = {
-      date: date
-    }
-
-    // request from covid api
-    covid.request(totalType, totalQuery)
-    .then(response => {
-      const data = response.data;
-      for(let key in data){
-        if(key === 'fatality_rate'){
-          data[key] = UtilityService.toPercentage(data[key]);
-        } else {
-          if(typeof data[key] === 'number'){
-            data[key] = UtilityService.addCommas(data[key] > 0 ? data[key] : 0);
-          }
-        }        
-      }
-      this.setState({total: data});
-    })
-    .catch(err => {
-      console.log(err);
-      this.setState({total: 0})
-    });
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <div className="global">
-          <h1>Global Totals</h1>
-
-          <div>
             <h2>Yesterday</h2>
             <Table responsive striped bordered hover size="sm">
               <thead>
@@ -370,9 +262,8 @@ class GlobalTotals extends React.Component {
               </tbody>
             </Table>
           </div>
-        </div>
-      </React.Fragment>
-    )
+      </div>
+    );
   }
 }
 
@@ -380,8 +271,8 @@ class Totals extends React.Component {
   render() {
     return (
       <>
-        <GlobalTotals />
-        <CountryTotals />
+        <TotalsTable global="true" />
+        <TotalsTable />
       </>
     );
   }
