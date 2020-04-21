@@ -2,7 +2,7 @@ import Request from './Request';
 
 const API_KEY =`${process.env.REACT_APP_COVID_19_API_KEY}`;
 
-const covid = {
+const CovidService = {
 	request: (type, query) => {
 		let url = 'https://covid-19-statistics.p.rapidapi.com';
 		const host = "covid-19-statistics.p.rapidapi.com";
@@ -29,4 +29,4 @@ const covid = {
 	}
 }
 
-export default covid;
+export default CovidService;

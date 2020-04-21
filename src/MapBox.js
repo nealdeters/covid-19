@@ -1,7 +1,7 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import './MapBox.scss';
-import covid from './covid';
+import CovidService from './CovidService';
 import MapBoxService from './MapBoxService';
 import UtilityService from './UtilityService';
 
@@ -31,8 +31,8 @@ class MapBox extends React.Component {
 	      date: date
 	    }
 
-	    // request from covid api
-	    covid.request(type, query)
+	    // request from CovidService api
+	    CovidService.request(type, query)
 	    .then(response => {
 	      const data = response.data;
 	      MapBoxService.addMapLayers(map, data);

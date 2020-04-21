@@ -1,3 +1,11 @@
 export default function request(url, method, headers) {
-	return fetch(url, {method: method, headers: headers});
+	const additional = {
+		method: method ? method : 'GET'
+	}
+
+	if(headers){
+		additional.headers = headers;
+	}
+
+	return fetch(url, additional);
 }

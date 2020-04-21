@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
-import covid from './covid';
+import CovidService from './CovidService';
 import UtilityService from './UtilityService';
 import MessageService from './MessageService';
 import './Countries.scss';
@@ -25,7 +25,7 @@ class CountryList extends React.Component {
     const query = {
       date: date
     }
-    covid.request(type, query)
+    CovidService.request(type, query)
     .then(response => {
       const data = response.data;
       let countries = [];
@@ -150,7 +150,7 @@ class TotalsTable extends React.Component {
     } : {
       date: date
     }
-    covid.request(type, query).then(response => {
+    CovidService.request(type, query).then(response => {
       const data = response.data;
       let total;
       if(iso){
@@ -270,10 +270,10 @@ class TotalsTable extends React.Component {
 class Totals extends React.Component {
   render() {
     return (
-      <>
+      <React.Fragment>
         <TotalsTable global="true" />
         <TotalsTable />
-      </>
+      </React.Fragment>
     );
   }
 }
@@ -281,7 +281,7 @@ class Totals extends React.Component {
 class Countries extends React.Component {
   render() {
     return (
-      <>
+      <React.Fragment>
         <Container fluid>
           <Row>
             <Col md="2">
@@ -292,7 +292,7 @@ class Countries extends React.Component {
             </Col>
           </Row>
         </Container>
-      </>
+      </React.Fragment>
     )
   }
 }
