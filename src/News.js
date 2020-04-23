@@ -5,12 +5,7 @@ import Request from './Request';
 import UtilityService from './UtilityService';
 import './News.scss';
 
-let API_KEY;
-if(process.env.NODE_ENV !== 'production'){
-  API_KEY = `${process.env.REACT_APP_NEWS_API_KEY}`;
-} else {
-  API_KEY = `${process.env.NEWS_API_KEY}`;
-}
+const API_KEY = `${process.env.REACT_APP_NEWS_API_KEY}`;
 
 const NewsService = {
   request: (type, query) => {

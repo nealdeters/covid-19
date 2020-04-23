@@ -5,11 +5,7 @@ import CovidService from './CovidService';
 import MapBoxService from './MapBoxService';
 import UtilityService from './UtilityService';
 
-if(process.env.NODE_ENV !== 'production'){
-	mapboxgl.accessToken = `${process.env.REACT_APP_MAPBOX_API_KEY}`;
-} else {
-	mapboxgl.accessToken = `${process.env.MAPBOX_API_KEY}`;
-}
+mapboxgl.accessToken = `${process.env.REACT_APP_MAPBOX_API_KEY}`;
 
 class MapBox extends React.Component {
 	componentDidMount() {
