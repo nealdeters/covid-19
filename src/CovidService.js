@@ -1,6 +1,11 @@
 import Request from './Request';
 
-const API_KEY =`${process.env.REACT_APP_COVID_19_API_KEY}`;
+let API_KEY;
+if(process.env.NODE_ENV !== 'production'){
+	API_KEY = `${process.env.REACT_APP_COVID_19_API_KEY}`;
+} else {
+	API_KEY = `${process.env.COVID_19_API_KEY}`;
+}
 
 const CovidService = {
 	request: (type, query) => {
