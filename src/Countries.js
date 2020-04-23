@@ -207,8 +207,10 @@ class TotalsTable extends React.Component {
   }
 
   componentWillUnmount() {
-    // unsubscribe to ensure no memory leaks
-    this.subscription.unsubscribe();
+    if(this.subscription){
+      // unsubscribe to ensure no memory leaks
+      this.subscription.unsubscribe();
+    }
   }
 
   render() {
