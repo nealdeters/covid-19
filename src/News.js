@@ -9,7 +9,7 @@ const API_KEY =`${process.env.REACT_APP_NEWS_API_KEY}`;
 const NewsService = {
   request: (type, query) => {
     const date = UtilityService.getYesterday();
-    let url = `http://newsapi.org/v2/everything?q=top-covid-19-news&from=2020-04-21&sortBy=popularity&apiKey=${API_KEY}`;
+    let url = `http://newsapi.org/v2/everything?q=top-covid-19-news&sortBy=popularity&apiKey=${API_KEY}`;
     const method = "GET";
     return Request(url, method).then(response => {
       return response.json();
