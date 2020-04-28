@@ -3,7 +3,7 @@ import UtilityService from './UtilityService';
 const MapBoxService = {
 	addMapLayers: (map, data) => {
 		const geoData = MapBoxService.convertToGeoJson(data);
-
+		
 	  map.addSource('covid', {
 	    'type': 'geojson',
 	    'data': geoData,

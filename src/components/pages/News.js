@@ -1,15 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
 import {Container, Row, Col, ListGroup, Image} from 'react-bootstrap';
-import Request from './Request';
-import UtilityService from './UtilityService';
+import Request from '../../utils/Request';
 import './News.scss';
 
 const API_KEY = `${process.env.REACT_APP_NEWS_API_KEY}`;
 
 const NewsService = {
   request: (type, query) => {
-    const date = UtilityService.getYesterday();
     let url = `http://newsapi.org/v2/everything?q=top-covid-19-news&sortBy=popularity&apiKey=${API_KEY}`;
     const method = "GET";
     return Request(url, method).then(response => {
@@ -51,7 +48,8 @@ class News extends React.Component {
                     <span className="news-content">
                       <a 
                       href={article.url} 
-                      target="_blank">
+                      target="_blank"
+                      rel="noopener noreferrer">
                         {article.title}</a>
                       <p>{article.description}</p>
                     </span>
@@ -60,7 +58,8 @@ class News extends React.Component {
                 <ListGroup.Item>
                   <a 
                     href="https://newsapi.org"
-                    target="_blank">
+                    target="_blank"
+                    rel="noopener noreferrer">
                     Powered by NewsApi
                   </a>
                 </ListGroup.Item>

@@ -4,9 +4,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
-import CovidService from './CovidService';
-import UtilityService from './UtilityService';
-import MessageService from './MessageService';
+import CovidService from '../../utils/CovidService';
+import UtilityService from '../../utils/UtilityService';
+import MessageService from '../../utils/MessageService';
 import './Countries.scss';
 
 class CountryList extends React.Component {
