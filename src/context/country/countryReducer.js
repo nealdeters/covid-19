@@ -1,10 +1,12 @@
 import {
   GET_COUNTRIES,
   FILTER_COUNTRIES,
-  SET_CURRENT,
-  CLEAR_CURRENT,
   SET_LOADING,
-  COUNTRIES_ERROR
+  COUNTRIES_ERROR,
+  GET_CURRENT_DATA,
+  GET_GLOBAL_DATA,
+  CLEAR_CURRENT_DATA,
+  CLEAR_GLOBAL_DATA
 } from '../types';
 
 export default (state, action) => {
@@ -25,23 +27,33 @@ export default (state, action) => {
         }),
         loading: false
       };
-    case SET_CURRENT:
+    case GET_GLOBAL_DATA:
       return {
         ...state,
-        current: action.payload,
+        globalData: action.payload,
         loading: false
-      }
-    case CLEAR_CURRENT:
+      };
+    case GET_CURRENT_DATA:
       return {
         ...state,
-        current: null,
+        currentData: action.payload,
         loading: false
-      }
+      };
     case SET_LOADING:
     	return {
     		...state,
     		loading: true
     	}
+    case CLEAR_CURRENT_DATA:
+      return {
+        ...state,
+        currentData: null
+      };
+    case CLEAR_GLOBAL_DATA:
+      return {
+        ...state,
+        globalData: null
+      }
     case COUNTRIES_ERROR:
     	console.error(action.payload);
     	return {

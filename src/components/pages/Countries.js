@@ -4,23 +4,37 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FilterList from './FilterList';
 import TotalsTable from './TotalsTable';
-import CountryContext from '../../context/country/countryContext'
+import CountryContext from '../../context/country/countryContext';
 import './Countries.scss';
 
-// TotalsTable
-  // data
-
 const Countries = () => {
-
   const countryContext = useContext(CountryContext);
-  const { filtered, getCountries, filterCountries, setCurrent, clearCurrent } = countryContext;
+  const { 
+    filtered, 
+    globalData, 
+    currentData, 
+    getCountries, 
+    filterCountries, 
+    getData,
+    loading,
+    clearData
+  } = countryContext;
 
   // on mount get countries and global data from countryState
   useEffect(() => {
+    // get countries list
     getCountries();
 
+    // get global data
+    getData();
+
+    // on dismount
     return () => {
-      clearCurrent();
+      clearData();
+      
+      if(currentData){
+        clearData(true);
+      }
     };
 
     // eslint-disable-next-line
@@ -32,7 +46,8 @@ const Countries = () => {
 
   const handleClick = (e) => {
     let current = e.target.dataset.current;
-    setCurrent(current);
+    clearData(true);
+    getData(current);
   }
 
   return (
@@ -46,8 +61,14 @@ const Countries = () => {
               handleClick={handleClick} />
           </Col>
           <Col md="10">
-            <TotalsTable global="true" />
-            <TotalsTable />
+            <TotalsTable 
+                data={globalData} 
+                header="Global Totals"
+                loading={loading} />
+            <TotalsTable 
+                data={currentData} 
+                header={currentData ? `${currentData.name} Totals` : null}
+                loading={loading} />
           </Col>
         </Row>
       </Container>
