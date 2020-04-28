@@ -1,3 +1,9 @@
 export const GET_REGIONS = 'GET_REGIONS';
 export const SET_LOADING = 'SET_LOADING';
 export const REGIONS_ERROR = 'REGIONS_ERROR';
+
+export const GET_COUNTRIES = 'GET_COUNTRIES';
+export const SET_CURRENT = 'SET_CURRENT';
+export const CLEAR_CURRENT = 'CLEAR_CURRENT';
+export const COUNTRIES_ERROR = 'COUNTRIES_ERROR';
+export const FILTER_COUNTRIES = 'FILTER_COUNTRIES';
