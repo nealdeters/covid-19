@@ -1,9 +1,11 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom'
 import './TotalsTable.scss';
 
-const TotalsTable = ({ data, loading, header}) => {
+const TotalsTable = ({ data, loading, header, route, moreInfo}) => {
   const labels = {
     active: 'Active',
     confirmed: 'Confirmed',
@@ -21,6 +23,8 @@ const TotalsTable = ({ data, loading, header}) => {
   return ( 
     <div className="totals">
       { header ? (<h1>{header}</h1>) : null }
+      { data && !loading && route !== null && moreInfo ? (<Button variant="secondary" as={Link} to={route}>More Info</Button>) : null }
+
       { !data && !loading ? 
         null 
         : !data && loading ? (
