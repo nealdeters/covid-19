@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
 
-const FilterList = ({ filtered, handleChange, handleClick}) => {
+const FilterList = ({ filtered, filterPlaceholder, handleChange, handleClick}) => {
   return (
     <Fragment>
       <div className="country">
         <input 
           className="search form-control"
           type="text" 
-          placeholder="Search Countries..."
+          placeholder={filterPlaceholder}
           onChange={handleChange}
         />
         

@@ -7,50 +7,40 @@ import TotalsTable from './TotalsTable';
 import CovidContext from '../../context/covid/covidContext';
 import UtilityService from '../../utils/UtilityService';
 
-import './Countries.scss';
-
-const Countries = () => {
+const Provinces = ({ match }) => {
   const covidContext = useContext(CovidContext);
 
-  const [countryList, setCountryList] = useState(null);
-  const [current, setCurrent] = useState(null);
-  const [countryData, setCountryData] = useState(null);
+  const { regions, loading, getRegions, getCountry, getProvinceList, getProvince } = covidContext;
+
+  const [provinceList, setProvinceList] = useState(null);
   const [filtered, setFiltered] = useState(null);
-  const [moreInfo, setMoreInfo] = useState(false);
+  const [countryData, setCountryData] = useState(null);
+  const [provinceData, setProvinceData] = useState(null);
 
-  const { 
-    regions,
-    globalData,
-    getRegions,
-    getCountry,
-    getCountryList,
-    getGlobalData,
-    loading
-  } = covidContext;
-
+  // on mount
   useEffect(() => {
     if(regions === null){
       getRegions();
-
-      // get global data
-      getGlobalData();
     } else {
-      let filtered = getCountryList();
-      setCountryList(filtered);
-      setFiltered(filtered);
+      let iso = match.params.iso;
+      getCountry(iso).then(country => {
+        let filtered = getProvinceList(country);
+
+        let totals = UtilityService.getTotals(iso, country);
+        setCountryData(totals);
+
+        setProvinceList(filtered);
+        setFiltered(filtered);
+      });
     }
-
-    // on dismount
-    return () => {
-
-    };
 
     // eslint-disable-next-line
   }, [regions]);
 
   const handleChange = (e) => {
+    // filter the provinces
     let text = e.target.value.toLowerCase();
-    let uFiltered = countryList.filter(item => {
+    let uFiltered = provinceList.filter(item => {
       return item.label.toLowerCase().search(
         text) !== -1;
     });
@@ -59,16 +49,11 @@ const Countries = () => {
   }
 
   const handleClick = async (e) => {
-    let iso = e.target.dataset.current;
-    let country = await getCountry(iso);
-
-    if(country.length > 1){
-      setMoreInfo(true);
-    }
-
-    let totals = UtilityService.getTotals(iso, country);
-    setCurrent(iso);
-    setCountryData(totals);
+    let current = e.target.dataset.current;
+    let iso = match.params.iso;
+    let province = await getProvince(iso, current);
+    let totals = UtilityService.getTotals(iso, province);
+    setProvinceData(totals);
   }
 
   return (
@@ -80,20 +65,19 @@ const Countries = () => {
               filtered={filtered}
               handleChange={handleChange}
               handleClick={handleClick}
-              filterPlaceholder="Search Countries..." />
+              filterPlaceholder="Search Provinces..." />
           </Col>
           <Col md="10">
-            <TotalsTable 
-                data={globalData} 
-                header="Global Totals"
-                loading={loading}
-                route={null} />
             <TotalsTable 
                 data={countryData} 
                 header={countryData ? `${countryData.name} Totals` : null}
                 loading={loading}
-                moreInfo={moreInfo}
-                route={`/countries/${current}`} />
+                route={null} />
+            <TotalsTable 
+                data={provinceData} 
+                header={provinceData ? `${provinceData.subName} Totals` : null}
+                loading={loading}
+                route={null} />
           </Col>
         </Row>
       </Container>
@@ -101,4 +85,4 @@ const Countries = () => {
   )
 }
 
-export default Countries;
+export default Provinces;
