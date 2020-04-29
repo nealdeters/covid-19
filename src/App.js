@@ -16,7 +16,7 @@ class App extends React.Component {
             <Switch>
               <Route exact path="/" component={MapBox} />
               <Route exact path="/countries" component={Countries} />
-              <Route exact path="/countries/:iso" component={Provinces} />
+              <Route exact path="/countries/:country" component={Provinces} />
             </Switch>
           </React.Fragment>
         </Router>

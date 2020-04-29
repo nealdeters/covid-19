@@ -22,13 +22,12 @@ const Provinces = ({ match }) => {
     if(regions === null){
       getRegions();
     } else {
-      let iso = match.params.iso;
+      let iso = match.params.country;
       getCountry(iso).then(country => {
         let filtered = getProvinceList(country);
 
         let totals = UtilityService.getTotals(iso, country);
         setCountryData(totals);
-
         setProvinceList(filtered);
         setFiltered(filtered);
       });
@@ -50,7 +49,7 @@ const Provinces = ({ match }) => {
 
   const handleClick = async (e) => {
     let current = e.target.dataset.current;
-    let iso = match.params.iso;
+    let iso = match.params.country;
     let province = await getProvince(iso, current);
     let totals = UtilityService.getTotals(iso, province);
     setProvinceData(totals);
@@ -60,25 +59,38 @@ const Provinces = ({ match }) => {
     <Fragment>
       <Container fluid>
         <Row>
-          <Col md="2">
-            <FilterList 
-              filtered={filtered}
-              handleChange={handleChange}
-              handleClick={handleClick}
-              filterPlaceholder="Search Provinces..." />
-          </Col>
-          <Col md="10">
-            <TotalsTable 
-                data={countryData} 
-                header={countryData ? `${countryData.name} Totals` : null}
-                loading={loading}
-                route={null} />
-            <TotalsTable 
-                data={provinceData} 
-                header={provinceData ? `${provinceData.subName} Totals` : null}
-                loading={loading}
-                route={null} />
-          </Col>
+          { provinceList && provinceList.length > 1 ? (
+            <Fragment>
+              <Col md="2">
+                <FilterList 
+                  filtered={filtered}
+                  handleChange={handleChange}
+                  handleClick={handleClick}
+                  filterPlaceholder="Search Provinces..." />
+              </Col>
+              <Col md="10">
+                <TotalsTable 
+                    data={countryData} 
+                    header={countryData ? `${countryData.name} Totals` : null}
+                    loading={loading}
+                    route={null} />
+                <br />
+                <TotalsTable 
+                    data={provinceData} 
+                    header={provinceData ? `${provinceData.subName} Totals` : null}
+                    loading={loading}
+                    route={null} />
+              </Col>
+            </Fragment>
+          ) : (
+            <Col md="12">
+              <TotalsTable 
+                  data={countryData} 
+                  header={countryData ? `${countryData.name} Totals` : null}
+                  loading={loading}
+                  route={null} />
+            </Col>
+          )}
         </Row>
       </Container>
     </Fragment>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
@@ -23,7 +23,11 @@ const TotalsTable = ({ data, loading, header, route, moreInfo}) => {
   return ( 
     <div className="totals">
       { header ? (<h1>{header}</h1>) : null }
-      { data && !loading && route !== null && moreInfo ? (<Button variant="secondary" as={Link} to={route}>More Info</Button>) : null }
+      { data && !loading && route !== null && moreInfo ? (
+        <Fragment>
+          <Button className="more-info" size="sm" variant="secondary" as={Link} to={route}>More Info</Button>
+        </Fragment>
+      ) : null }
 
       { !data && !loading ? 
         null 
