@@ -88,6 +88,7 @@ const Countries = () => {
                 header="Global Totals"
                 loading={loading}
                 route={null} />
+            <br />
             <TotalsTable 
                 data={countryData} 
                 header={countryData ? `${countryData.name} Totals` : null}
